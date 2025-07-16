@@ -39,7 +39,7 @@ double calculateInternetCost(
     // First month price with discount
     double firstMonthPrice = initialPricePerMonth - discountAmount;
     //std::cout << "Month 1 (with discount): GBP " << firstMonthPrice << "\n";
-    /**
+    /**/
     for (int month = contractStartMonth; month <= contractLengthMonths + contractStartMonth - 1; ++month) {
         
 
@@ -99,7 +99,7 @@ double calculateInternetCost(
             inflationAppliedThisYear = false;
         }
     }
-    */
+    //*/
 
 
 
