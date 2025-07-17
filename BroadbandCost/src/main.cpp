@@ -39,7 +39,7 @@ double calculateInternetCost(
     // First month price with discount
     double firstMonthPrice = initialPricePerMonth - discountAmount;
     //std::cout << "Month 1 (with discount): GBP " << firstMonthPrice << "\n";
-    /**/
+    /*
     for (int month = contractStartMonth; month <= contractLengthMonths + contractStartMonth - 1; ++month) {
         
 
@@ -99,8 +99,43 @@ double calculateInternetCost(
             inflationAppliedThisYear = false;
         }
     }
-    //*/
+    */
 
+    for (int month = 1; month <= contractLengthMonths; ++month) {
+        int billingMonth = (contractStartMonth + month - 1) % 12;
+        if (billingMonth == 0) billingMonth = 12;
+
+        if (billingMonth == inflationMonth && !inflationAppliedThisYear) {
+            if (useFlatInflation) {
+                currentMonthlyPrice += inflationValue;
+            }
+            else {
+                currentMonthlyPrice *= (1 + inflationValue / 100.0);
+            }
+
+            inflationAppliedThisYear = true;
+            billChanged = true;
+        }
+
+        double billedPrice = (month <= discountDurationMonths)
+            ? currentMonthlyPrice - discountAmount
+            : currentMonthlyPrice;
+
+        totalCost += billedPrice;
+
+        if (billChanged) {
+            std::cout << "Month " << month << ": Price updated due to inflation -> GBP " << billedPrice << "\n";
+            billChanged = false;
+        }
+        else {
+            std::cout << "Month " << month << ": Price -> GBP " << billedPrice << "\n";
+        }
+
+        // Reset for next year
+        if (billingMonth == 12) {
+            inflationAppliedThisYear = false;
+        }
+    }
 
 
     return totalCost;
