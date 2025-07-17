@@ -33,6 +33,11 @@ double calculateInternetCost(
     bool inflationAppliedThisYear = false;
     bool billChanged = false;
 
+    const std::string monthNames[12] = {
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    };
+
     std::cout << std::fixed << std::setprecision(2);
     std::cout << "Original monthly price before discount: GBP " << initialPricePerMonth << "\n";
     
@@ -101,11 +106,18 @@ double calculateInternetCost(
     }
     */
 
-    for (int month = 1; month <= contractLengthMonths; ++month) {
+    for (int month = 1; month <= contractLengthMonths; ++month)
+    {
+        //int billingMonth = (contractStartMonth + month - 1) % 12;
+
+
         int billingMonth = (contractStartMonth + month - 1) % 12;
         if (billingMonth == 0) billingMonth = 12;
+        std::string billingMonthName = monthNames[billingMonth - 1]; // -1 to align with 0-indexing
 
-        if (billingMonth == inflationMonth && !inflationAppliedThisYear) {
+
+        if (billingMonth == inflationMonth && !inflationAppliedThisYear)
+        {
             if (useFlatInflation) {
                 currentMonthlyPrice += inflationValue;
             }
@@ -123,16 +135,23 @@ double calculateInternetCost(
 
         totalCost += billedPrice;
 
-        if (billChanged) {
-            std::cout << "Month " << month << ": Price updated due to inflation -> GBP " << billedPrice << "\n";
+        if (billChanged)
+        {
+            //std::cout << "Month " << month << ": Price updated due to inflation -> GBP " << billedPrice << "\n";
+            std::cout << "Month " << month << ": Price updated due to inflation -> GBP " << billedPrice << " [" << billingMonthName << "]\n";
+
             billChanged = false;
         }
-        else {
-            std::cout << "Month " << month << ": Price -> GBP " << billedPrice << "\n";
+        else
+        {
+            //std::cout << "Month " << month << ": Price -> GBP " << billedPrice << "\n";
+            std::cout << "Month " << month << ": Price -> GBP " << billedPrice << " [" << billingMonthName << "]\n";
+
         }
 
         // Reset for next year
-        if (billingMonth == 12) {
+        if (billingMonth == 12)
+        {
             inflationAppliedThisYear = false;
         }
     }
